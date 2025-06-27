@@ -84,4 +84,41 @@ Logout the current user and blacklist the token provided in cooking or headers.
 
 ### Authentication
 
-Requires a valid JWT token in the Authorization header : 
+Requires a valid JWT token in the Authorization header or cookies: 
+
+## `/captain/register` Endpoint
+
+### Description
+
+Register a new captai by creating a certain account with the provided information.
+
+### HTTP Method
+
+`POST`
+
+### Request Body
+
+The request body should be in JSON format and include the following fields: 
+- `fullname` (object):
+    - `firstName` (string, required): Captain's first name (minimum 3 characters)
+    - `lastname` (string, optional): Captain's last name
+    - `vehicle` (object):
+        - `color` (string, required): Vehicle color (minimum 3 characters).
+        - `plate` (string, required): Vehicle plate number (minimum 3 characters).
+        - `capacity` (number, required): Vehicle passenger capacity (minimum 1)
+        - `vehicleType` (string, required): Type of vehicle (must be 'car', 'motorcycle' or 'auto')
+
+        ### Example Response
+
+- `captain` (object):
+    - `fullName` (object).
+         - `firstname` (string): User's first name .
+        - `lastname` (string, optional): User's last name.
+    - `email` (string): User's email address.
+    - `password` (string): User's password.
+    - `vehicle` (object)
+        - `color` (string): User's color
+        - `capacity` (number): Vehicle capacity
+        - `VehicleType` (string): Vehicle type
+        - `plate` (string): vehicle number plate
+- `token` (String): JWT token
