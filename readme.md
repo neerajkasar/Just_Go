@@ -86,7 +86,7 @@ Logout the current user and blacklist the token provided in cooking or headers.
 
 Requires a valid JWT token in the Authorization header or cookies: 
 
-## `/captain/register` Endpoint
+## `/captains/register` Endpoint
 
 ### Description
 
