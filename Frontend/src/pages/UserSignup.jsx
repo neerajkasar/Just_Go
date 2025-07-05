@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import UserDataContext from "../context/usercontext";
 const UserSignup = () => {
 
     const [email, setEmail] = useState('');
@@ -7,20 +9,32 @@ const UserSignup = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [userData, setUserData] = useState('');
+    const navigate = useNavigate();
+    const { user, setUser} = useContext(UserDataContext);
 
-    // useEffect(()=> {
-
-    // },[])
-
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        setUserData({
-            userName: {
-                firstName, lastName
+        // setUserData({
+            // fullName: {
+            //     firstName, lastName
+            // },
+            // email, password
+        // });
+        const newUser = {
+            fullname: {
+                firstname, lastname
             },
             email, password
-        });
-        console.log('userdata',userData);
+        }
+       
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,newUser)
+
+        if(response.status == 201){
+            const data = response.data;
+            setUser(data.user);
+            localStorage.setItem('token',data.token);
+            navigate('/home');
+        }
         
         setFirstName('');
         setLastName('');
@@ -49,7 +63,7 @@ const UserSignup = () => {
                     <input className="bg-[#eeeeee] mb-6 rounded px-4 py-2 border w-full text-lg placeholder:text-base" type="email" required placeholder="email@example.com" value={email} onChange={(e) => { setEmail(e.target.value) }} />
                     <h3 className="text-lg font-medium mb-2">Enter Password</h3>
                     <input className="bg-[#eeeeee] mb-6 rounded px-4 py-2 border w-full text-lg placeholder:text-base" type="password" placeholder="Password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
-                    <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-lg placeholder:base">Login</button>
+                    <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-lg placeholder:base">Create new account</button>
                     <p className="text-center">Already have a account?
                         <Link to="/login" className="text-blue-600"> Login here</Link>
                     </p>
@@ -59,8 +73,11 @@ const UserSignup = () => {
                 {/* <Link to='/captain-login' className="bg-[#10b461] flex items-center justify-center text-white font-semibold mb-7 rounded px-4 py-2 border w-full text-lg placeholder:base">Sign as Captain</Link> */}
 
                 <p className="text-[10px] leading-tight">
-                    By proceeding, you consentto get calls, WhatsApp or SMS messages, including by automated means, form Uber and it affilates to the number provided.
+                    By proceeding, you consent to get calls, WhatsApp or SMS messages, including by automated means, form Uber and it affilates to the number provided.
                 </p>
+            </div>
+            <div>
+                <p className="text-[10px leading-tight">This site is protected by reCAPTCH and <span className="underline">Google Privacy Policy</span> and <span className="underline">Terms of Service apply</span>.</p>
             </div>
         </div>
     )
