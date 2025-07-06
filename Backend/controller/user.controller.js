@@ -5,33 +5,32 @@ const blackListTokenModel = require('../models/blacklistToken.model')
 
 
 module.exports.registerUser = async (req, res, next) => {
-     const errors = validationResult(req);
-     if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array() });
-     }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-     const { fullName, email} = req.body;
 
-     const isUserAlreadyExist = userModel.findOne({ email });
-     if(isUserAlreadyExist){
-        res.status(400).json({ message: 'User already exist'});
-     }
+  const { fullname, email, password } = req.body;
 
-     const hashedPassword = await userModel.hashPassword(password);
+  const existingUser = await userModel.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ message: "User already exists" });
+  }
 
-     const user = await userService.createUser({
-        firstName: fullName.firstName,
-        lastName: fullName.lastName,
-        email,
-        password: hashedPassword
-     });
+  const hashedPassword = await userModel.hashPassword(password);
+  const user = await userService.createUser({
+    firstName: fullname.firstname,
+    lastName: fullname.lastname,
+    email,
+    password: hashedPassword,
+  });
 
-     const token = user.generateAuthToken();
+  const token = user.generateAuthToken();
+  res.cookie("token", token);
+  return res.status(201).json({ token, user });
+};
 
-     res.cookie('token',token);
-
-     res.status(201).json({token, user});
-}
 
 module.exports.loginUser = async (req, res, nexr) => {
     const errors = validationResult(req);
@@ -48,7 +47,7 @@ module.exports.loginUser = async (req, res, nexr) => {
     const isMatch = await user.comparePassword(password);
 
     if(!isMatch){
-        return res.status(401).json({ message: 'Invalid email or password'})
+        return res.status(401).json({ message: 'Invalid email or password, is match'})
     }
 
     const token = user.generateAuthToken();

@@ -6,20 +6,14 @@ const UserSignup = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
     const [userData, setUserData] = useState('');
     const navigate = useNavigate();
     const { user, setUser} = useContext(UserDataContext);
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        // setUserData({
-            // fullName: {
-            //     firstName, lastName
-            // },
-            // email, password
-        // });
         const newUser = {
             fullname: {
                 firstname, lastname
@@ -27,7 +21,7 @@ const UserSignup = () => {
             email, password
         }
        
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,newUser)
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser)
 
         if(response.status == 201){
             const data = response.data;
@@ -51,10 +45,10 @@ const UserSignup = () => {
                 }}>
                     <h3 className="text-lg font-medium mb-2">What's your Name</h3>
                     <div className="flex gap-4 mb-6">
-                        <input className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 border text-lg placeholder:text-sm" type="text" required placeholder="First name" value={firstName} onChange={(e) => {
+                        <input className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 border text-lg placeholder:text-sm" type="text" required placeholder="First name" value={firstname} onChange={(e) => {
                             setFirstName(e.target.value)
                         }} />
-                        <input className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 border text-base placeholder:text-base" type="text" required placeholder="Last name" value={lastName} onChange={(e) => {
+                        <input className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 border text-base placeholder:text-base" type="text" required placeholder="Last name" value={lastname} onChange={(e) => {
                             setLastName(e.target.value)
                         }} />
                     </div>
